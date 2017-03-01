@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'replay@betterus.com.cn', 'name' => 'system'],
 //    'from' => ['address' => 'test@betterus.cn', 'name' => 'test'],
 
     /*

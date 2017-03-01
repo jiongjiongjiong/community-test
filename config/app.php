@@ -137,7 +137,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Naux\Mail\ SendCloudServiceProvider::class,
+        Naux\Mail\SendCloudServiceProvider::class,
+
 
         /*
          * Application Service Providers...
