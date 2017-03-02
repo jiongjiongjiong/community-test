@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
+use Auth;
 use App\Http\Controllers\Controller;
 
 
@@ -68,8 +69,9 @@ class UsersController extends Controller
         $user->is_confirmed = 1;
         $user->confirm_code = str_random(48);
         $user->save();
-//        \Session::flash();
+        \Session::flash('email_confirm','邮箱验证');
         return redirect('user/login');
+
     }
 
     /**
@@ -117,10 +119,28 @@ class UsersController extends Controller
         //
     }
 
+    public function login()
+    {
+        return view('users.login');
+    }
+
+    public function signin(Requests\UserLoginRequest $request)
+    {
+        if(Auth::attempt([
+            'email' => $request->get('email'),
+            'password' => $request->get('password'),
+            'is_confirmed' => 1
+        ])){
+            return redirect('/');
+        }
+        \Session::flash('user_login_failed','密码不正确或者邮箱没有验证');
+        return redirect('/user/login')->withInput();
+    }
+
     private function sendTo($user, $subject, $view, $data=[])
     {
 
-       Mail::send($view, $data, function($m) use ($user, $subject){
+       Mail::queue($view, $data, function($m) use ($user, $subject){
            $m->to($user->email)->subject($subject);
         });
 

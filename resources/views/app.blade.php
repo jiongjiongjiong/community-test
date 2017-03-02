@@ -23,8 +23,13 @@
                     <li class="active"><a href="#">首页</a><iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="../navbar/">登 录</a></li>
+                    @if(Auth::check())
+                        <li><a href="../navbar/">{{ Auth::user()->name }}</a></li>
+
+                    @else
+                    <li><a href="/user/login">登 录</a></li>
                     <li class="active"><a href="/user/register">注 册<span class="sr-only">(current)</span></a></li>
+                        @endif
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
