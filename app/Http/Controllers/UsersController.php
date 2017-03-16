@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-//use Mail;
-use Illuminate\Support\Facades\Mail;
+use Mail;
+//use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\User;
