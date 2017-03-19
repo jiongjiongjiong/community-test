@@ -137,6 +137,24 @@ class UsersController extends Controller
         return redirect('/user/login')->withInput();
     }
 
+    public function avatar()
+    {
+        return view('users.avatar');
+    }
+
+    public function changeAvatar(Request $request)
+    {
+        $file = $request->file('avatar');
+        $destinationPath = 'uploads/';
+        $filename = Auth::user()->id. '_' .time() .$file->getClientOriginalName();
+        $file->move($destinationPath, $filename);
+        $user = User::find(Auth::user()->id);
+        $user->avatar = $destinationPath.$filename;
+        $user->save();
+
+        return redirect('/user/avatar');
+    }
+
     private function sendTo($user, $subject, $view, $data=[])
     {
 
