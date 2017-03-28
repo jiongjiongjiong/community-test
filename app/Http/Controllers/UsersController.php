@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\User;
 use Auth;
 use App\Http\Controllers\Controller;
+use Image;
 
 
 class UsersController extends Controller
@@ -145,14 +146,30 @@ class UsersController extends Controller
     public function changeAvatar(Request $request)
     {
         $file = $request->file('avatar');
+        $input = ['image' => $file];
+        $rules = [
+            'image' => 'image'
+        ];
+        $validator = \Validator::make($input, $rules);
+        if( $validator->fails()){
+            return \Response::json([
+                'success' => false,
+                'errors'  => $validator->getMessageBag()->toArray()
+            ]);
+        }
         $destinationPath = 'uploads/';
         $filename = Auth::user()->id. '_' .time() .$file->getClientOriginalName();
         $file->move($destinationPath, $filename);
+        Image::make($destinationPath.$filename)->fit(200)->save();
         $user = User::find(Auth::user()->id);
         $user->avatar = $destinationPath.$filename;
         $user->save();
 
-        return redirect('/user/avatar');
+        return \Response::json([
+            'success' => true,
+            'avatar'  => asset($destinationPath.$filename)
+        ]);
+
     }
 
     private function sendTo($user, $subject, $view, $data=[])
