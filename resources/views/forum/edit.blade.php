@@ -2,7 +2,16 @@
 @section('content');
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2" role="main">
+        <div class="col-md-10 col-md-offset-1" role="main">
+            @if($errors->any())
+                <ul class="list-group">
+                    @foreach($errors->all() as $error)
+                        <li class="list-group-item list-group-item-danger">
+                            {{ $error }}
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
             {!! Form::model($discussion,['method'=>'PATCH','url'=>'/discussions/'.$discussion->id]) !!}
             @include('forum.form')
             <div>

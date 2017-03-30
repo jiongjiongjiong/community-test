@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use YuanChao\Editor\EndaEditor;
 
 class PostsController extends Controller
 {
@@ -107,6 +108,12 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+    }
+
+    public function upload()
+    {
+        $data = EndaEditor::uploadImgFile('uploads');
+        return json_encode($data);
     }
 }

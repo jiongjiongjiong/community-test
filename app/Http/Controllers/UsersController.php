@@ -160,16 +160,33 @@ class UsersController extends Controller
         $destinationPath = 'uploads/';
         $filename = Auth::user()->id. '_' .time() .$file->getClientOriginalName();
         $file->move($destinationPath, $filename);
-        Image::make($destinationPath.$filename)->fit(200)->save();
-        $user = User::find(Auth::user()->id);
-        $user->avatar = $destinationPath.$filename;
-        $user->save();
+        Image::make($destinationPath.$filename)->fit(400)->save();
+//        $user = User::find(Auth::user()->id);
+//        $user->avatar = $destinationPath.$filename;
+//        $user->save();
 
         return \Response::json([
             'success' => true,
-            'avatar'  => asset($destinationPath.$filename)
+            'avatar'  =>asset($destinationPath.$filename),
+            'image'  => $destinationPath.$filename
         ]);
 
+    }
+
+    public function cropAvatar(Request $request)
+    {
+        $photo = $request->get('photo');
+        $width = (int) $request->get('w');
+        $height = (int) $request->get('h');
+        $xAlign = (int) $request->get('x');
+        $yAlign = (int) $request->get('y');
+
+        Image::make($photo)->crop($width,$height,$xAlign,$yAlign)->save();
+        $user = Auth::user();
+        $user->avatar = asset($photo);
+        $user->save();
+
+        return redirect('/user/avatar');
     }
 
     private function sendTo($user, $subject, $view, $data=[])
